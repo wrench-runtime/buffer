@@ -1,5 +1,15 @@
 #include <stdlib.h>
-#include <wren_buffer.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+//#include <wren_buffer.h>
+#include <wren.h>
+#include <wren_runtime.h>
+
+static void wren_runtime_error(WrenVM* vm, const char * error){
+  wrenSetSlotString(vm, 0, error); 
+  wrenAbortFiber(vm, 0);
+}
 
 int plugin_handle;
 
@@ -145,7 +155,7 @@ static void buffer_copy_to_4(WrenVM* vm){
   memcpy(&to->data[offsetDst], &from->data[offsetSrc], length);
 }
 
-void wrt_plugin_init(int handle){
+WrenForeignMethodFn wrt_plugin_init_buffer(int handle){
   plugin_handle = handle;
   wrt_bind_class("buffer.Buffer", buffer_allocate, buffer_free);
   wrt_bind_method("buffer.Buffer.create_(_)", buffer_create_1);
@@ -176,4 +186,6 @@ void wrt_plugin_init(int handle){
   BUFFER_WRITE_BIND(Int32);
   BUFFER_WRITE_BIND(Float);
   BUFFER_WRITE_BIND(Double);
+
+  return NULL;
 }
