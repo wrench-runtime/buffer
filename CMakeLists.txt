@@ -11,9 +11,13 @@ set_target_properties(module_buffer PROPERTIES PREFIX "")
 set_target_properties(module_buffer PROPERTIES OUTPUT_NAME "buffer")
 target_link_libraries(module_buffer PUBLIC wren_runtime)
 
+# script
+set(module_buffer_script ${CMAKE_CURRENT_SOURCE_DIR}/wren/buffer.wren)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/wren/buffer.wren ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/buffer.wren COPYONLY)
+# tests
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/wren/buffer.spec.wren ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/../tests/buffer.spec.wren COPYONLY)
 
 # The sources shared between the main program and the tests
 add_library(module_buffer_static STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/buffer.c)
 target_link_libraries(module_buffer_static PUBLIC wren_runtime)
-
+set_target_properties(module_buffer_static PROPERTIES WREN_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/wren/buffer.wren)

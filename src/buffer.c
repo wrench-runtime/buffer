@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
-//#include <wren_buffer.h>
 #include <wren.h>
 #include <wren_runtime.h>
 
@@ -30,6 +29,8 @@ static void buffer_allocate(WrenVM* vm){
 
 static void buffer_create_1(WrenVM* vm){
   Buffer* buffer = (Buffer*)wrenGetSlotForeign(vm, 0);
+  //printf("%i\n", wrenGetSlotType(vm, 1));
+
   buffer->size = wrenGetSlotDouble(vm, 1);
   if(buffer->size != 0){
     buffer->data = (char*)calloc(buffer->size, sizeof(char));
